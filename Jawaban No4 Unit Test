@@ -1,0 +1,43 @@
+'''Jawaban No4 Unit Test'''
+
+'''Customer.dart'''
+
+class Customer{
+  String nama;
+  int umur;
+
+  int get age => umur;
+  set age(int value){
+    if(value < 0){
+      value *= -1;
+    }
+    umur = value;
+  }
+  Customer(){
+    nama = "Dhia";
+    umur =0;
+    }
+  }
+
+
+'''Customer_test.dart'''
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:zulhaimii14/Customer.dart';
+
+
+void main() {
+  Customer p;
+  p = Customer();
+
+  test("Test Unit Nama", () {
+    expect(p.nama, equals("Dhia"));
+  }
+  );
+  test("Test Unit Umur", () {
+    p.umur = -8;
+    expect(p.umur, isPositive);
+  }
+  );
+}
+
