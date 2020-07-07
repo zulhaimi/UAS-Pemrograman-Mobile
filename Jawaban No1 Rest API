@@ -1,0 +1,81 @@
+'''Jawaban No1 Rest API'''
+
+'''Main.Dart'''
+
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:zul8/user_model.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  User user = null;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Zulhaimi JAWABAN1 REST API"),),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text((user != null)
+              ? user.id + "  |  " + user.name
+                  : "Tidak ada data" , style: TextStyle(fontFamily: "Schyler",fontStyle: FontStyle.italic, fontSize: 40),),
+              RaisedButton(
+                onPressed: () {
+                  User.connectToAPI("3").then((onValue) {
+                  user = onValue;
+                  setState(() {});
+                  });
+                },
+                child: Text("GET"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+'''user_model.dart'''
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class User
+{
+  String id;
+  String name;
+
+  User({this.id, this.name});
+
+  factory User.createUser(Map<String, dynamic> object)
+  {
+    return User(
+        id: object['id'].toString(),
+        name: object['first_name'] + " " + object['last_name']
+    );
+  }
+
+  static Future<User> connectToAPI(String id) async
+  {
+    String apiURL = "https://reqres.in/api/users/" +id;
+
+    var apiResult = await http.get(apiURL);
+    var jsonObject = json.decode(apiResult.body);
+    var userData = (jsonObject as Map<String, dynamic>)['data'];
+
+    return User.createUser(userData);
+  }
+}
